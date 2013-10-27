@@ -116,10 +116,12 @@ overflow:auto;
 	<tr><td>Time</td><td><span id="timeused"></span></td></tr>
 		<tr><td>Output</td><td><span id="compileoutput"></span></td></tr>
 	</table>
+	<br/><a href="#gotit">Got It..</a>
 	</div>
 <div id="wrongbox"><table>
 	<tr><td bgcolor="#FF0000">ERROR</td></tr><tr><td><span id="wrong"></span></td></tr>
 	</table>
+	<br/><a href="#gotit">Got It..</a>
 	</div>
 
 
@@ -130,6 +132,12 @@ overflow:auto;
 	$('a[href="#share"]').click(function(){
 	$("#sharebox").val("http://gcdc2013-collaboratr.appspot.com/!{{resultid}}").toggle();
 	});
+	
+	$('a[href="#gotit"]').click(function(){
+	$("#wrongbox").hide();
+	$("#correct").hide();
+	});
+	
 	$('#correct').hide();
 	$('#wrongbox').hide();	
         var editor = ace.edit("editor");

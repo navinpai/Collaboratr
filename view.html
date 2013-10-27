@@ -6,8 +6,9 @@
 <link
 	href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:700|Quicksand'
 	rel='stylesheet' type='text/css'>
-<script
-	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <title>Collaboratr</title>
 <style type="text/css" media="screen">
 body{
@@ -67,6 +68,19 @@ a:active {
 #head {
 	margin-left: 20%;
 }
+
+}
+#correct,#wrongbox{
+position: relative;
+margin-top: 1%;
+margin-left: 80%;
+width: 20%;
+overflow:auto;
+}
+#gplus{
+margin-left: 30%;
+margin-top: 10px
+}
 </style>
 </head>
 <body>
@@ -89,21 +103,37 @@ a:active {
 			<option value="PHP">PHP</option>
 			<option value="RUBY">Ruby</option>
 		</select>
+	<span id="gplus"><g:plus action="share"></g:plus></span>	
 	</div>
+	
 	<div id="editor"></div>
 	<a href="#compile">COMPILE</a>
-	<div id="correct"><table>
+	
+		<div id="correct"><table>
 	<tr><td>Compile Status</td><td><span id="compilestatus"></span></td></tr>
 	<tr><td>Memory Used</td><td><span id="memory"></span></td></tr>
 	<tr><td>Time</td><td><span id="timeused"></span></td></tr>
 		<tr><td>Output</td><td><span id="compileoutput"></span></td></tr>
 	</table>
+	<br/><a href="#gotit">Got It..</a>
 	</div>
-	<div id="wrong"></div>
-
+<div id="wrongbox"><table>
+	<tr><td bgcolor="#FF0000">ERROR</td></tr><tr><td><span id="wrong"></span></td></tr>
+	</table>
+	<br/><a href="#gotit">Got It..</a>
+	</div>
 
 	<script>
 	$(document).ready(function() {
+	
+	$("#wrongbox").hide();
+	$("#correct").hide();
+	
+	$('a[href="#gotit"]').click(function(){
+	$("#wrongbox").hide();
+	$("#correct").hide();
+	});
+	
 	$('#correct').hide();
         var editor = ace.edit("editor");
         editor.getSession().setUseWorker(false);

@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<script src="src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+ <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:700' rel='stylesheet' type='text/css'>
+ <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<title>Collaboratr</title>
+<style type="text/css" media="screen">
+#editor {
+	position: absolute;
+	top: 250px;
+	right: 0;
+	bottom: 100px;
+	left: 0;
+}
+a {
+	position: absolute;
+	bottom:15px;
+    color: rgba(255,255,255,1);
+    text-decoration: none;
+    background-color: rgba(72,0,255,1);
+    font-family: 'Yanone Kaffeesatz';
+    font-weight: 60;
+    font-size: 3em;
+    display: block;
+    padding: 4px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: 0px 9px 0px rgba(33,0,127,1), 0px 9px 25px rgba(0,0,0,.7);
+    -moz-box-shadow: 0px 9px 0px rgba(33,0,127,1), 0px 9px 25px rgba(0,0,0,.7);
+    box-shadow: 0px 9px 0px rgba(33,0,127,1), 0px 9px 25px rgba(0,0,0,.7);
+    width: 120px;
+	text-align: center;
+	
+	-webkit-transition: all .1s ease;
+	-moz-transition: all .1s ease;
+	-ms-transition: all .1s ease;
+	-o-transition: all .1s ease;
+	transition: all .1s ease;
+}
+
+a:active {
+    -webkit-box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
+    -moz-box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
+    box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
+    position: relative;
+    top: 6px;
+}
+</style>
+</head>
+<body>
+	<img src="img/collaboratr.png"/>
+	<select id="lang">
+	C, CPP, CPP11, CLOJURE, CSHARP, JAVA, JAVASCRIPT, HASKELL, PERL, PHP, PYTHON, RUBY
+  <option value="C">C</option>
+  <option value="CPP">C++</option>
+  <option value="CPP11">C++11</option>
+  <option value="CLOJURE">Closure</option>
+  <option value="CSHARP">CSharp</option>
+  <option value="JAVA">Java</option>
+  <option value="JAVASCRIPT">Javascript</option>
+  <option value="HASKELL">Haskell</option>
+  <option value="PERL">Perl</option>
+  <option value="PYTHON">Python</option>
+  <option value="PHP">PHP</option>
+  <option value="RUBY">Ruby</option>
+</select> 
+	<div id="editor"></div>
+	<a href="javascript:void(0);">COMPILE</a>
+
+
+	<script>
+	$(document).ready(function() {
+        var editor = ace.edit("editor");
+        editor.getSession().setUseWorker(false);
+        editor.setTheme("ace/theme/dream");
+        editor.getSession().setMode("ace/mode/python");
+        editor.setValue('print "#gcdcrocks"');
+        
+        $("#lang").change(function(){
+        switch($("#lang").val()){
+        case 'PYTHON':
+        editor.getSession().setMode("ace/mode/python");
+        break;
+        case 'RUBY':
+        editor.getSession().setMode("ace/mode/ruby");
+        break;
+        case 'PERL':
+        editor.getSession().setMode("ace/mode/perl");
+        break;
+        case 'HASKELL':
+        editor.getSession().setMode("ace/mode/haskell");
+        break;
+        case 'JAVASCRIPT':
+        editor.getSession().setMode("ace/mode/javascript");
+        break;
+        case 'CPP':
+        editor.getSession().setMode("ace/mode/c_cpp");
+        break;
+        case 'CPP11':
+        editor.getSession().setMode("ace/mode/c_cpp");
+        break;
+        case 'C':
+        editor.getSession().setMode("ace/mode/c_cpp");
+        break;
+		case 'JAVA':
+        editor.getSession().setMode("ace/mode/java");
+        break;
+        case 'CSHARP':
+        editor.getSession().setMode("ace/mode/csharp");
+        break;
+        case 'PHP':
+        editor.getSession().setMode("ace/mode/php");
+        break;   
+        case 'CLOJURE':
+        editor.getSession().setMode("ace/mode/clojure");
+        break;
+        default:
+        alert("Dafuq?");
+        break;     
+        }
+        });
+        });
+    </script>
+</body>
+
+</html>

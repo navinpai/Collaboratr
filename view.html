@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<script src="src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+<link
+	href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:700|Quicksand'
+	rel='stylesheet' type='text/css'>
+<script
+	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<title>Collaboratr</title>
+<style type="text/css" media="screen">
+body{
+font-family: 'Quicksand', sans-serif;
+}
+#editor {
+	position: absolute;
+	top: 250px;
+	right: 400px;
+	bottom: 100px;
+	left: 30%;
+}
+
+a {
+	position: absolute;
+	bottom: 15px;
+	left: 45%;
+	color: rgba(255, 255, 255, 1);
+	text-decoration: none;
+	background-color: rgba(72, 0, 255, 1);
+	font-family: 'Yanone Kaffeesatz';
+	font-weight: 60;
+	font-size: 3em;
+	display: block;
+	padding: 4px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 0px 9px 0px rgba(33, 0, 127, 1), 0px 9px 25px
+		rgba(0, 0, 0, .7);
+	-moz-box-shadow: 0px 9px 0px rgba(33, 0, 127, 1), 0px 9px 25px
+		rgba(0, 0, 0, .7);
+	box-shadow: 0px 9px 0px rgba(33, 0, 127, 1), 0px 9px 25px
+		rgba(0, 0, 0, .7);
+	width: 120px;
+	text-align: center;
+	-webkit-transition: all .1s ease;
+	-moz-transition: all .1s ease;
+	-ms-transition: all .1s ease;
+	-o-transition: all .1s ease;
+	transition: all .1s ease;
+}
+
+a:active {
+	-webkit-box-shadow: 0px 3px 0px rgba(219, 31, 5, 1), 0px 3px 6px
+		rgba(0, 0, 0, .9);
+	-moz-box-shadow: 0px 3px 0px rgba(219, 31, 5, 1), 0px 3px 6px
+		rgba(0, 0, 0, .9);
+	box-shadow: 0px 3px 0px rgba(219, 31, 5, 1), 0px 3px 6px
+		rgba(0, 0, 0, .9);
+}
+
+#langsel {
+	margin-left: 30%;
+}
+
+#head {
+	margin-left: 20%;
+}
+</style>
+</head>
+<body>
+	<div id="head">
+		<img src="img/collaboratr.png" />
+	</div>
+	<div id="langsel">
+		<select id="lang" de> C, CPP, CPP11, CLOJURE, CSHARP, JAVA,
+			JAVASCRIPT, HASKELL, PERL, PHP, PYTHON, RUBY
+			<option value="C">C</option>
+			<option value="CPP">C++</option>
+			<option value="CPP11">C++11</option>
+			<option value="CLOJURE">Closure</option>
+			<option value="CSHARP">CSharp</option>
+			<option value="JAVA">Java</option>
+			<option value="JAVASCRIPT">Javascript</option>
+			<option value="HASKELL">Haskell</option>
+			<option value="PERL">Perl</option>
+			<option value="PYTHON" selected="selected">Python</option>
+			<option value="PHP">PHP</option>
+			<option value="RUBY">Ruby</option>
+		</select>
+	</div>
+	<div id="editor"></div>
+	<a href="#compile">COMPILE</a>
+	<div id="correct"><table>
+	<tr><td>Compile Status</td><td><span id="compilestatus"></span></td></tr>
+	<tr><td>Memory Used</td><td><span id="memory"></span></td></tr>
+	<tr><td>Time</td><td><span id="timeused"></span></td></tr>
+		<tr><td>Output</td><td><span id="compileoutput"></span></td></tr>
+	</table>
+	</div>
+	<div id="wrong"></div>
+
+
+	<script>
+	$(document).ready(function() {
+	$('#correct').hide();
+        var editor = ace.edit("editor");
+        editor.getSession().setUseWorker(false);
+        editor.setTheme("ace/theme/dream");
+        editor.getSession().setMode("ace/mode/python");
+        editor.setValue(hereDoc(function(){ {% autoescape off %}{{ result }}{% endautoescape %}}));
+        
+		var a=setInterval(function(){
+		$.get( "/get",{ id: "{{resultid}}" }, function( data ) {
+			var mydata=data.code;
+			console.log("Code"+mydata);
+			editor.setValue(mydata.slice(2,-2));
+			$('#lang').val(data.language)
+			 $('#lang').trigger('change');
+        
+});
+		
+		},3000);
+		
+		
+		$('a[href="#compile"]').click(function(){
+ $.ajax({
+				type: "POST",
+				url: "/run",
+				data: { lang: $('#lang').val(), code: editor.getValue() },
+				success: function(data){
+				if(data.compile_status=="OK"){
+				$("#correct").show();
+				$("#wrong").hide();
+				$("#compilestatus").text(data.compile_status);
+				$("#timeused").text(data.run_status.time_used);
+				$("#memory").text(data.run_status.memory_used);
+				$("#compileoutput").html(data.run_status.output_html);
+				}
+				else if(data.run_status.status=="CE"){
+				$("#correct").hide();
+				$("#wrong").text(data.compile_status).show();
+				
+				}
+				},
+				dataType: "json"
+			});
+});
+		
+        $("#lang").change(function(){
+        switch($("#lang").val()){
+        case 'PYTHON':
+        editor.getSession().setMode("ace/mode/python");
+        break;
+        case 'RUBY':
+        editor.getSession().setMode("ace/mode/ruby");
+        break;
+        case 'PERL':
+        editor.getSession().setMode("ace/mode/perl");
+        break;
+        case 'HASKELL':
+        editor.getSession().setMode("ace/mode/haskell");
+        break;
+        case 'JAVASCRIPT':
+        editor.getSession().setMode("ace/mode/javascript");
+        break;
+        case 'CPP':
+        editor.getSession().setMode("ace/mode/c_cpp");
+        break;
+        case 'CPP11':
+        editor.getSession().setMode("ace/mode/c_cpp");
+        break;
+        case 'C':
+        editor.getSession().setMode("ace/mode/c_cpp");
+        break;
+		case 'JAVA':
+        editor.getSession().setMode("ace/mode/java");
+        break;
+        case 'CSHARP':
+        editor.getSession().setMode("ace/mode/csharp");
+        break;
+        case 'PHP':
+        editor.getSession().setMode("ace/mode/php");
+        break;   
+        case 'CLOJURE':
+        editor.getSession().setMode("ace/mode/clojure");
+        break;
+        default:
+        alert("Dafuq?");
+        break;     
+        }
+        });
+        });
+        
+        function hereDoc(f) {
+  return f.toString().
+      replace(/^[^\/]+\/\*!?/, '').
+      replace(/\*\/[^\/]+$/, '');
+}
+
+function hereStr(f) {
+  return f.
+      replace(/^[^\/]+\/\*!?/, '').
+      replace(/\*\/[^\/]+$/, '');
+}
+    </script>
+</body>
+
+</html>

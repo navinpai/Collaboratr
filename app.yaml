@@ -1,0 +1,16 @@
+application: gcdc2013-collaboratr
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /img
+  static_dir: img
+
+- url: /src-min
+  static_dir: src-min
+
+    
+- url: /.*
+  script: helloworld.app
